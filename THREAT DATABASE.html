@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCS World - Database Minacce Completo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Roboto+Condensed:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111921;
+            --bg-tertiary: #1a2332;
+            --accent-green: #00ff88;
+            --accent-cyan: #00d4ff;
+            --accent-red: #ff3366;
+            --accent-orange: #ff9500;
+            --accent-yellow: #ffd700;
+            --accent-purple: #bf7fff;
+            --text-primary: #e8f4f0;
+            --text-secondary: #8ba4b5;
+            --border-color: #2a3a4a;
+            --glow-green: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Rajdhani', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        .bg-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; z-index: 0; }
+        header { position: relative; padding: 1.5rem 2rem; background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%); border-bottom: 1px solid var(--border-color); z-index: 10; }
+        .header-content { max-width: 1800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        .logo-icon { width: 50px; height: 50px; background: var(--bg-tertiary); border: 2px solid var(--accent-green); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Roboto Condensed', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--accent-green); box-shadow: var(--glow-green); }
+        h1 { font-family: 'Roboto Condensed', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: 2px; background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .subtitle { font-size: 0.9rem; color: var(--text-secondary); letter-spacing: 1px; }
+        .stats-bar { display: flex; gap: 1.5rem; font-family: 'Share Tech Mono', monospace; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.5rem; color: var(--accent-cyan); font-weight: 600; }
+        .stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; }
+        main { position: relative; max-width: 1800px; margin: 0 auto; padding: 1.5rem; z-index: 10; }
+        .legend { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+        .legend-title { font-family: 'Roboto Condensed', sans-serif; font-size: 0.9rem; color: var(--accent-cyan); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 1px; }
+        .legend-grid { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--text-secondary); }
+        .filters-section { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+        .filters-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; font-family: 'Roboto Condensed', sans-serif; font-size: 0.9rem; color: var(--accent-green); text-transform: uppercase; letter-spacing: 2px; }
+        .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.3rem; }
+        .filter-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .filter-input, .filter-select { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 5px; padding: 0.5rem 0.7rem; color: var(--text-primary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; }
+        .filter-input:focus, .filter-select:focus { outline: none; border-color: var(--accent-green); box-shadow: var(--glow-green); }
+        .filter-select option { background: var(--bg-secondary); }
+        .category-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+        .tab-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 5px; padding: 0.5rem 1rem; color: var(--text-secondary); font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+        .tab-btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .tab-btn.active { background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.2)); border-color: var(--accent-green); color: var(--accent-green); }
+        .tab-count { background: var(--bg-tertiary); border-radius: 3px; padding: 0.1rem 0.35rem; font-size: 0.9rem; margin-left: 0.35rem; }
+        .units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .unit-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; transition: all 0.3s ease; cursor: pointer; position: relative; }
+        .unit-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); transform: scaleX(0); transition: transform 0.3s ease; }
+        .unit-card:hover { border-color: var(--accent-green); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 255, 136, 0.12); }
+        .unit-card:hover::before { transform: scaleX(1); }
+        .unit-image-container { position: relative; height: 110px; background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-primary) 100%); display: flex; align-items: center; justify-content: center; }
+        .unit-image-container::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 25px; background: linear-gradient(transparent, var(--bg-secondary)); pointer-events: none; }
+        .unit-img { width: 100%; height: 100%; object-fit: cover; }
+        .unit-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border-color); }
+        .placeholder-text { color: var(--text-secondary); font-size: 0.9rem; text-align: center; padding: 0.4rem; font-family: 'Share Tech Mono', monospace; }
+        .unit-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.8rem; background: var(--bg-tertiary); }
+        .unit-name { font-family: 'Roboto Condensed', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+        .unit-designation { font-size: 0.9rem; color: var(--accent-cyan); margin-top: 0.1rem; }
+        .unit-type-badge { padding: 0.2rem 0.5rem; border-radius: 3px; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+        .badge-aaa { background: rgba(255, 149, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
+        .badge-sam { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .badge-naval { background: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .badge-radar { background: rgba(0, 255, 136, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .badge-ewr { background: rgba(191, 127, 255, 0.2); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+        .badge-manpads { background: rgba(255, 215, 0, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .unit-body { padding: 0.8rem; }
+        .unit-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; margin-bottom: 0.6rem; }
+        .unit-stat { display: flex; flex-direction: column; gap: 0.05rem; }
+        .unit-stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .unit-stat-value { font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--text-primary); }
+        .unit-footer { display: none; }
+        .country-badge { background: var(--bg-primary); border: 1px solid var(--text-secondary); border-radius: 3px; padding: 0.15rem 0.4rem; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--text-secondary); margin-left: 0.5rem; }
+        .rwr-symbol { background: var(--bg-primary); border: 1px solid var(--accent-green); border-radius: 3px; padding: 0.15rem 0.4rem; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--accent-green); text-shadow: 0 0 8px rgba(0, 255, 136, 0.5); }
+        .harm-code { background: var(--bg-primary); border: 1px solid var(--accent-orange); border-radius: 3px; padding: 0.15rem 0.4rem; font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--accent-orange); }
+        .countermeasure { padding: 0.15rem 0.4rem; border-radius: 3px; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; }
+        .cm-ch { background: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .cm-fl { background: rgba(255, 215, 0, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .cm-ev { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .guidance-tag { font-size: 0.9rem; padding: 0.15rem 0.4rem; border-radius: 3px; text-transform: uppercase; font-weight: 600; background: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .guidance-radar { background: rgba(0, 212, 255, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+        .guidance-optical { background: rgba(255, 215, 0, 0.2); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+        .guidance-ir { background: rgba(255, 51, 102, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .threat-row { display: flex; justify-content: space-between; align-items: center; padding-top: 0.6rem; border-top: 1px solid var(--border-color); margin-top: 0.6rem; }
+        .threat-section { display: flex; align-items: center; gap: 0.5rem; }
+        .threat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .threat-bar { display: flex; gap: 2px; }
+        .threat-segment { width: 8px; height: 14px; border-radius: 2px; background: var(--bg-tertiary); border: 1px solid var(--border-color); }
+        .threat-segment.active.low { background: var(--accent-green); border-color: var(--accent-green); box-shadow: 0 0 4px var(--accent-green); }
+        .threat-segment.active.med { background: var(--accent-yellow); border-color: var(--accent-yellow); box-shadow: 0 0 4px var(--accent-yellow); }
+        .threat-segment.active.high { background: var(--accent-orange); border-color: var(--accent-orange); box-shadow: 0 0 4px var(--accent-orange); }
+        .threat-segment.active.crit { background: var(--accent-red); border-color: var(--accent-red); box-shadow: 0 0 4px var(--accent-red); }
+        .tags-section { display: flex; gap: 0.4rem; align-items: center; }
+        .role-tag { font-size: 0.9rem; padding: 0.1rem 0.35rem; border-radius: 3px; background: var(--bg-primary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 14, 20, 0.95); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; overflow-y: auto; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--bg-secondary); border: 1px solid var(--accent-green); border-radius: 10px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 255, 136, 0.2); }
+        .modal-image-header { height: 180px; background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-primary) 100%); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: move; }
+        .modal-image-header img { max-width: 85%; max-height: 85%; object-fit: contain; z-index: 1; transition: transform 0.1s ease-out; }
+        .modal-image-header:hover img { max-width: 150%; max-height: 150%; }
+        .modal-image-header .unit-placeholder { transition: transform 0.4s ease; }
+        .modal-image-header:hover .unit-placeholder { transform: scale(1.3); }
+        .modal-header { padding: 1rem; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; }
+        .modal-title { font-family: 'Roboto Condensed', sans-serif; font-size: 1.1rem; color: var(--accent-green); }
+        .modal-subtitle { color: var(--accent-cyan); margin-top: 0.15rem; font-size: 0.9rem; }
+        .modal-close { background: none; border: 1px solid var(--border-color); border-radius: 5px; color: var(--text-secondary); width: 32px; height: 32px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s ease; }
+        .modal-close:hover { border-color: var(--accent-red); color: var(--accent-red); }
+        .modal-body { padding: 1rem; }
+        .modal-section { margin-bottom: 1rem; }
+        .modal-section-title { font-size: 0.9rem; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border-color); }
+        .modal-description { color: var(--text-secondary); line-height: 1.6; font-size: 0.9rem; }
+        .modal-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.6rem; }
+        .modal-stat { background: var(--bg-tertiary); padding: 0.6rem; border-radius: 5px; }
+        .modal-stat-label { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.2rem; }
+        .modal-stat-value { font-family: 'Share Tech Mono', monospace; font-size: 0.9rem; color: var(--text-primary); }
+        .radar-info { background: var(--bg-tertiary); border-radius: 6px; padding: 0.8rem; margin-top: 0.5rem; }
+        .radar-info-title { font-size: 0.9rem; color: var(--accent-green); margin-bottom: 0.4rem; text-transform: uppercase; }
+        .radar-info-value { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; }
+        .no-results { text-align: center; padding: 2.5rem 1.5rem; color: var(--text-secondary); }
+        @media (max-width: 768px) { h1 { font-size: 1.2rem; } .stats-bar { display: none; } .units-grid { grid-template-columns: 1fr; } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">DCS</div>
+                <div>
+                    <h1>THREAT DATABASE</h1>
+                    <p class="subtitle">by LightMaster</p>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat"><div class="stat-value" id="total-units">0</div><div class="stat-label">Totali</div></div>
+                <div class="stat"><div class="stat-value" id="visible-units">0</div><div class="stat-label">Filtrati</div></div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="legend">
+            <div class="legend-title">⚡ Legenda</div>
+            <div class="legend-grid">
+                <div class="legend-item"><span class="countermeasure cm-ch">CH</span> CHAFF</div>
+                <div class="legend-item"><span class="countermeasure cm-fl">FL</span> FLARE</div>
+                <div class="legend-item"><span class="countermeasure cm-ev">EV</span> EVADE</div>
+                <div class="legend-item"><span class="rwr-symbol">RWR</span> Simbolo RWR</div>
+                <div class="legend-item"><span class="harm-code">xxx</span> HARM Code</div>
+            </div>
+        </div>
+        <section class="filters-section">
+            <div class="filters-header">⚙ Filtri</div>
+            <div class="filters-grid">
+                <div class="filter-group"><label class="filter-label">Cerca</label><input type="text" class="filter-input" id="search-input" placeholder="Nome, NATO, RWR..."></div>
+                <div class="filter-group"><label class="filter-label">Contromisura</label><select class="filter-select" id="filter-cm"><option value="">Tutte</option><option value="CH">CHAFF</option><option value="FL">FLARE</option><option value="EV">EVADE</option></select></div>
+                <div class="filter-group"><label class="filter-label">Guida</label><select class="filter-select" id="filter-guidance"><option value="">Tutte</option><option value="RADAR">Radar</option><option value="OPTICAL">Ottico</option><option value="IR">IR</option></select></div>
+                <div class="filter-group"><label class="filter-label">Gittata Min (KM)</label><input type="number" class="filter-input" id="filter-range" placeholder="es. 10"></div>
+            </div>
+        </section>
+        <div class="category-tabs" id="category-tabs">
+            <button class="tab-btn active" data-category="all">Tutte<span class="tab-count" id="count-all">0</span></button>
+            <button class="tab-btn" data-category="aaa">AAA<span class="tab-count" id="count-aaa">0</span></button>
+            <button class="tab-btn" data-category="manpads">MANPADS<span class="tab-count" id="count-manpads">0</span></button>
+            <button class="tab-btn" data-category="sam">SAM<span class="tab-count" id="count-sam">0</span></button>
+            <button class="tab-btn" data-category="radar">Radar<span class="tab-count" id="count-radar">0</span></button>
+            <button class="tab-btn" data-category="ewr">EWR<span class="tab-count" id="count-ewr">0</span></button>
+            <button class="tab-btn" data-category="naval">Naval<span class="tab-count" id="count-naval">0</span></button>
+        </div>
+        <div class="units-grid" id="units-grid"></div>
+        <div class="no-results" id="no-results" style="display: none;"><h3>🎯 Nessuna minaccia trovata</h3><p>Modifica i filtri</p></div>
+    </main>
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-image-header" id="modal-image"></div>
+            <div class="modal-header">
+                <div><h2 class="modal-title" id="modal-title"></h2><p class="modal-subtitle" id="modal-subtitle"></p></div>
+                <button class="modal-close" id="modal-close">×</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    <script>
+        const JSON_URL = 'https://ucci10.github.io/DCS-Threat-database/database.json';
+        const IMG_BASE = 'https://ucci10.github.io/DCS-Threat-database/images';
+        
+        function getImagePath(u) { return `${IMG_BASE}/${u.category}/${u.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}.png`; }
+
+        let db = [];
+        let currentCategory = 'all';
+        let filtered = [];
+        const grid = document.getElementById('units-grid');
+        const modal = document.getElementById('modal-overlay');
+
+        // Load database from JSON
+        async function loadDatabase() {
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error('Network error');
+                db = await response.json();
+                filtered = [...db];
+                init();
+            } catch (error) {
+                console.error('Error loading database:', error);
+                grid.innerHTML = '<div class="no-results"><h3>⚠️ Errore caricamento database</h3><p>Impossibile caricare i dati. Riprova più tardi.</p></div>';
+            }
+        }
+
+        function init() {
+            const c = {all:db.length, aaa:db.filter(u=>u.category==='aaa').length, manpads:db.filter(u=>u.category==='manpads').length, sam:db.filter(u=>u.category==='sam').length, radar:db.filter(u=>u.category==='radar').length, ewr:db.filter(u=>u.category==='ewr').length, naval:db.filter(u=>u.category==='naval').length};
+            Object.keys(c).forEach(k => { const el = document.getElementById(`count-${k}`); if(el) el.textContent = c[k]; });
+            document.getElementById('total-units').textContent = db.length;
+            render();
+            document.getElementById('category-tabs').addEventListener('click', e => { const btn = e.target.closest('.tab-btn'); if(!btn) return; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentCategory = btn.dataset.category; doFilter(); });
+            document.getElementById('search-input').addEventListener('input', doFilter);
+            document.getElementById('filter-cm').addEventListener('change', doFilter);
+            document.getElementById('filter-guidance').addEventListener('change', doFilter);
+            document.getElementById('filter-range').addEventListener('input', doFilter);
+            document.getElementById('modal-close').addEventListener('click', () => modal.classList.remove('active'));
+            modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('active'); });
+            document.addEventListener('keydown', e => { if(e.key === 'Escape') modal.classList.remove('active'); });
+        }
+
+        function doFilter() {
+            const s = document.getElementById('search-input').value.toLowerCase();
+            const cm = document.getElementById('filter-cm').value;
+            const g = document.getElementById('filter-guidance').value;
+            const r = parseFloat(document.getElementById('filter-range').value) || 0;
+            filtered = db.filter(u => {
+                if(currentCategory !== 'all' && u.category !== currentCategory) return false;
+                if(s && !u.name.toLowerCase().includes(s) && !(u.natoDesignation && u.natoDesignation.toLowerCase().includes(s)) && !(u.rwrSymbol && u.rwrSymbol.toLowerCase() === s) && !(u.harmCode && u.harmCode.includes(s)) && !(u.alias && u.alias.toLowerCase().includes(s))) return false;
+                if(cm && u.countermeasure !== cm) return false;
+                if(g && u.guidance !== g) return false;
+                if(r > 0 && (parseFloat(u['gittata-maxKM']) || 0) < r) return false;
+                return true;
+            });
+            document.getElementById('visible-units').textContent = filtered.length;
+            render();
+        }
+
+        function render() {
+            const nr = document.getElementById('no-results');
+            if(filtered.length === 0) { grid.innerHTML = ''; nr.style.display = 'block'; return; }
+            nr.style.display = 'none';
+            grid.innerHTML = filtered.map(u => {
+                const cat = {aaa:'AAA',manpads:'MANPADS',sam:'SAM',radar:'RADAR',ewr:'EWR',naval:'NAVAL'}[u.category];
+                const gC = u.guidance ? `guidance-${u.guidance.toLowerCase()}` : '';
+                const gLabel = u.guidance === 'RADAR' ? 'Radar' : u.guidance === 'IR' ? 'IR' : u.guidance === 'OPTICAL' ? 'Ottico' : '';
+                // Threat bar segments
+                const tl = u.threatLevel || 0;
+                let threatBar = '';
+                for(let i = 1; i <= 10; i++) {
+                    let cls = i <= tl ? 'active ' : '';
+                    if(i <= 3) cls += 'low';
+                    else if(i <= 5) cls += 'med';
+                    else if(i <= 7) cls += 'high';
+                    else cls += 'crit';
+                    threatBar += `<div class="threat-segment ${i <= tl ? cls : ''}"></div>`;
+                }
+                return `<div class="unit-card" data-id="${u.id}">
+                    <div class="unit-image-container">
+                        <img src="${getImagePath(u)}" alt="${u.name}" class="unit-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                        <div class="unit-placeholder" style="display:none;"><span class="placeholder-text">${u.name}</span></div>
+                    </div>
+                    <div class="unit-header">
+                        <div>
+                            <div class="unit-name">${u.name}${u.country ? `<span class="country-badge">${u.country}</span>` : ''}</div>
+                            ${u.natoDesignation ? `<div class="unit-designation">${u.natoDesignation}</div>` : ''}
+                            ${u.alias ? `<div class="unit-designation">"${u.alias}"</div>` : ''}
+                        </div>
+                        <span class="unit-type-badge badge-${u.category}">${cat}</span>
+                    </div>
+                    <div class="unit-body">
+                        <div class="unit-stats">
+                            <div class="unit-stat"><span class="unit-stat-label">Radar</span><span class="unit-stat-value">${u['radar-rangeKM'] || '-'}</span></div>
+                            <div class="unit-stat"><span class="unit-stat-label">Track</span><span class="unit-stat-value">${u['gittata-maxKM'] ? u['gittata-maxKM']+' km' : '-'}</span></div>
+                            <div class="unit-stat"><span class="unit-stat-label">RWR</span>${u.rwrSymbol && u.rwrSymbol !== '-' ? `<span class="rwr-symbol">${u.rwrSymbol}</span>` : '<span class="unit-stat-value">-</span>'}</div>
+                            <div class="unit-stat"><span class="unit-stat-label">HARM</span>${u.harmCode && u.harmCode !== '-' ? `<span class="harm-code">${u.harmCode}</span>` : '<span class="unit-stat-value">-</span>'}</div>
+                        </div>
+                        ${(u.threatLevel || u.guidance) ? `<div class="threat-row">
+                            <div class="threat-section">
+                                <span class="threat-label">MINACCIA</span>
+                                <div class="threat-bar">${threatBar}</div>
+                            </div>
+                            <div class="tags-section">
+                                ${u.guidance ? `<span class="guidance-tag ${gC}">${gLabel}</span>` : ''}
+                                ${u.role ? `<span class="role-tag">${u.role}</span>` : ''}
+                                ${u.shipType ? `<span class="role-tag">${u.shipType}</span>` : ''}
+                            </div>
+                        </div>` : ''}
+                    </div>
+                </div>`;
+            }).join('');
+            document.querySelectorAll('.unit-card').forEach(c => c.addEventListener('click', () => { const u = db.find(x => x.id === parseInt(c.dataset.id)); if(u) openModal(u); }));
+        }
+
+        function openModal(u) {
+            document.getElementById('modal-image').innerHTML = `<img src="${getImagePath(u)}" alt="${u.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="unit-placeholder" style="display:none;width:60%;height:60%;"><span class="placeholder-text">${u.name}</span></div>`;
+            document.getElementById('modal-title').textContent = u.name;
+            document.getElementById('modal-subtitle').textContent = u.natoDesignation || u.alias || '';
+            let h = `<div class="modal-section"><h3 class="modal-section-title">📋 Descrizione</h3><p class="modal-description">${u.description||'-'}</p>${u.history?`<div class="radar-info"><div class="radar-info-title">📜 Storia</div><div class="radar-info-value">${u.history}</div></div>`:''}${u.technicalNotes?`<div class="radar-info"><div class="radar-info-title">⚙️ Note Tecniche</div><div class="radar-info-value">${u.technicalNotes}</div></div>`:''}</div><div class="modal-section"><h3 class="modal-section-title">📊 Specifiche</h3><div class="modal-stats-grid">${u.country?`<div class="modal-stat"><div class="modal-stat-label">Paese</div><div class="modal-stat-value">${u.country}</div></div>`:''}<div class="modal-stat"><div class="modal-stat-label">Radar</div><div class="modal-stat-value">${u['radar-rangeKM']||'-'}</div></div><div class="modal-stat"><div class="modal-stat-label">Track</div><div class="modal-stat-value">${u['track-rangeKM']?u['track-rangeKM']+' km':'-'}</div></div><div class="modal-stat"><div class="modal-stat-label">Max</div><div class="modal-stat-value">${u['gittata-maxKM']?u['gittata-maxKM']+' km':'-'}</div></div><div class="modal-stat"><div class="modal-stat-label">Min</div><div class="modal-stat-value">${u['gittata-minKM']?u['gittata-minKM']+' km':'-'}</div></div><div class="modal-stat"><div class="modal-stat-label">Alt</div><div class="modal-stat-value">${u['gittata-altKM']?u['gittata-altKM']+' km':'-'}</div></div>${u.acquireTime?`<div class="modal-stat"><div class="modal-stat-label">Acquisizione</div><div class="modal-stat-value">${u.acquireTime}s</div></div>`:''}${u.guidance?`<div class="modal-stat"><div class="modal-stat-label">Guida</div><div class="modal-stat-value">${u.guidance}</div></div>`:''}${u.role?`<div class="modal-stat"><div class="modal-stat-label">Ruolo</div><div class="modal-stat-value">${u.role}</div></div>`:''}${u.shipType?`<div class="modal-stat"><div class="modal-stat-label">Tipo</div><div class="modal-stat-value">${u.shipType}</div></div>`:''}</div></div><div class="modal-section"><h3 class="modal-section-title">🎯 Identificazione</h3><div class="modal-stats-grid"><div class="modal-stat"><div class="modal-stat-label">RWR</div><div class="modal-stat-value">${u.rwrSymbol&&u.rwrSymbol!=='-'?`<span class="rwr-symbol">${u.rwrSymbol}</span>`:'-'}</div></div><div class="modal-stat"><div class="modal-stat-label">HARM</div><div class="modal-stat-value">${u.harmCode&&u.harmCode!=='-'?`<span class="harm-code">${u.harmCode}</span>`:'-'}</div></div>${u.countermeasure?`<div class="modal-stat"><div class="modal-stat-label">Contromisura</div><div class="modal-stat-value"><span class="countermeasure cm-${u.countermeasure.toLowerCase()}">${u.countermeasure}</span></div></div>`:''}</div></div>`;
+            if(u.trackRadar||u.searchRadar||u.associatedSam) h+=`<div class="modal-section"><h3 class="modal-section-title">📡 Radar</h3><div class="modal-stats-grid">${u.trackRadar?`<div class="modal-stat"><div class="modal-stat-label">Track</div><div class="modal-stat-value" style="font-size:0.75rem;">${u.trackRadar}</div></div>`:''}${u.searchRadar?`<div class="modal-stat"><div class="modal-stat-label">Search</div><div class="modal-stat-value" style="font-size:0.75rem;">${u.searchRadar}</div></div>`:''}${u.associatedSam?`<div class="modal-stat"><div class="modal-stat-label">SAM</div><div class="modal-stat-value">${u.associatedSam}</div></div>`:''}</div></div>`;
+            if(u.samSystems||u.ciws) h+=`<div class="modal-section"><h3 class="modal-section-title">🚀 Armamento</h3><div class="modal-stats-grid">${u.samSystems?`<div class="modal-stat"><div class="modal-stat-label">SAM</div><div class="modal-stat-value" style="font-size:0.75rem;">${u.samSystems}</div></div>`:''}${u.ciws?`<div class="modal-stat"><div class="modal-stat-label">CIWS</div><div class="modal-stat-value">${u.ciws}</div></div>`:''}</div></div>`;
+            if(u.ammo) h+=`<div class="modal-section"><h3 class="modal-section-title">💥 Munizioni</h3><div class="modal-stat" style="background:var(--bg-tertiary);padding:0.6rem;border-radius:5px;"><div class="modal-stat-value">${u.ammo}</div></div></div>`;
+            document.getElementById('modal-body').innerHTML = h;
+            modal.classList.add('active');
+            
+            // Setup pan + zoom effect for modal image
+            const imgHeader = document.getElementById('modal-image');
+            imgHeader.addEventListener('mousemove', (e) => {
+                const img = imgHeader.querySelector('img');
+                if (!img) return;
+                const rect = imgHeader.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+                // Move opposite to mouse: center is 0.5, so (0.5 - x) gives opposite direction
+                const moveX = (0.5 - x) * 80; // 80px max movement
+                const moveY = (0.5 - y) * 50; // 50px max movement
+                img.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.5)`;
+            });
+            imgHeader.addEventListener('mouseleave', () => {
+                const img = imgHeader.querySelector('img');
+                if (img) img.style.transform = 'translate(0, 0) scale(1)';
+            });
+        }
+
+        // Start loading
+        loadDatabase();
+    </script>
+</body>
+</html>
